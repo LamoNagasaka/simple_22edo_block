@@ -1,4 +1,5 @@
 
+//22平均律キーボード
 const audioContext = new (window.AudioContext || window.webkitAudioContext)(); //Web Audio APIを使用して音声を操作するためのAudio Contextを作成する
 const keyMap = '1234567890QWERTYUIOPASDFGHJKLZXCVBNM'.split(''); //キーボードのキーと対応する周波数をマッピングするための'keyMap'を定義
 let frequencies = [];  //生成された周波数を格納するための'frequencies'を定義する
@@ -29,15 +30,15 @@ function stopPlayingFrequency(key) {
 
 //キーボードのスケールを生成する
 function generateScale() {
-    const division = Math.min(document.getElementById('division').value, 31); // 最大31分割まで
+    //const division = Math.min(document.getElementById('division').value, 31); // 最大31分割まで
     const rootFrequency = 440; // A4の周波数
     frequencies = [];
 
-    for (let i = 0; i < division; i++) {
-        const frequency = rootFrequency * Math.pow(2, i / division);
+    for (let i = 0; i < 22; i++) {
+        const frequency = rootFrequency * Math.pow(2, i / 22);
         frequencies.push(frequency);
     }
-    updateKeyboardLayout(division); 
+    updateKeyboardLayout(22); 
 }
 
 ////ブロック型の作成
@@ -50,12 +51,12 @@ function updateKeyboardLayout(division) {
     const keyHeight = 200; // 鍵盤の高さ
     const margin =5 ; //鍵盤の間隔
 
-    for (let i = 0; i < division; i++) {
+    for (let i = 0; i < 22; i++) {
         const x = i * (keyWidth+margin); // 鍵盤ごとに横方向に配置
         const y = 0;
 
-        const noteDiv = document.createElement('div');
-        noteDiv.className = 'note'; //
+        const noteDiv = document.createElement('div'); //noteDivという変数を定義
+        noteDiv.className = 'note'; 
         noteDiv.style.left = `${x}px`;
         noteDiv.style.top = `${y}px`;
         noteDiv.style.width = `${keyWidth}px`;
@@ -69,6 +70,38 @@ function updateKeyboardLayout(division) {
         freqSpan.innerHTML = `${keyMap[i]}=${frequencies[i].toFixed(2)}Hz `;
         freqDiv.appendChild(freqSpan);
     }
+
+
+    for (let i = 0; i < 22; i++) {
+        const x = i * (keyWidth + margin); // 鍵盤ごとに横方向に配置
+        const y = 0;
+    
+        const noteDiv = document.createElement('div'); //noteDivという変数を定義
+        noteDiv.className = 'note';
+    
+        // ////キーボードのレイアウト
+        // // 3番目のブロックかどうかを確認し、背景色を設定する
+        // if (i === 2) {
+        //     noteDiv.style.background = 'black'; // 3番目のブロックを黒に塗ります
+        // } else {
+        //     noteDiv.style.background = 'white'; // 鍵盤の色
+        // }
+    
+        // noteDiv.style.left = `${x}px`;
+        // noteDiv.style.top = `${y}px`;
+        // noteDiv.style.width = `${keyWidth}px`;
+        // noteDiv.style.height = `${keyHeight}px`;
+        // noteDiv.textContent = keyMap[i];
+        // noteDiv.onclick = () => playFrequency(frequencies[i], i); // クリックで音を再生
+        // notesDiv.appendChild(noteDiv);
+    
+        // const freqSpan = document.createElement('div');
+        // freqSpan.innerHTML = `${keyMap[i]}=${frequencies[i].toFixed(2)}Hz `;
+        // freqDiv.appendChild(freqSpan);
+
+    }
+    
+
 }
 
 //キーがクリック（またはタップ）されると特定の周波数の音を再生
@@ -79,11 +112,10 @@ function playFrequency(frequency, keyIndex) {
     oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
     oscillator.connect(audioContext.destination);
     oscillator.start(); //再生
-    oscillator.stop(audioContext.currentTime + 0.5); //0.5秒後に停止
+    oscillator.stop(audioContext.currentTime + 0.3); //0.3秒後に停止
 
     highlightKey(keyIndex);
 }
-
 
 ////キーボード制御
 //キーが押されたときに呼び出される関数
