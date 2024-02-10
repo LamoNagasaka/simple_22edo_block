@@ -1,2 +1,2 @@
-# microtonal_block_layout1
-レイアウト1
+#simple_22edo_block
+22平均律キーボード　音のリリース短め
